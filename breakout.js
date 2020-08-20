@@ -28,7 +28,11 @@ let brickOffsetLeft = 30;
 let bricks = [];
 
 let score = 0;
+let runningScore = 0;
+let lives = 3;
 
+sessionStorage.setItem("score", runningScore);
+sessionStorage.setItem("lives", lives);
 
 for (let c=0; c<brickColumnCount; c++) {
     bricks[c] = [];
@@ -108,10 +112,15 @@ function collisionDetection() {
                     dy = -dy;
                     b.status = 0;
                     score++;
+                    runningScore++;
+                    if (runningScore % 10 == 0) {
+                        lives++;
+                    }
                     if (score == brickRowCount*brickColumnCount) {
                         alert("VICTORY");
-                        document.location.reload();
-                        clearInterval(interval);
+                        sessionStorage.getItem("score");
+                        sessionStorage.getItem("lives");
+                        drawBricks();
                     }
                 }
             }
@@ -125,12 +134,19 @@ function drawScore() {
     ctx.fillText("Score: " +score, 8, 20);
 }
 
+function drawLives() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Lives: "+lives, canvas.width-65, 20);
+}
+
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBall();
     drawPaddle();
     drawBricks();
     drawScore();
+    drawLives();
     collisionDetection();
 
     if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
@@ -145,9 +161,18 @@ function draw() {
             dy = -dy;
         }
         else {
-            alert("GAME OVER");
-            document.location.reload();
-            clearInterval(interval);
+            lives--;
+            if (!lives) {
+                alert("GAME OVER");
+                document.location.reload();
+            }
+            else {
+                x = canvas.width/2;
+                y = canvas.height-30;
+                dx = 3;
+                dy = -3;
+                paddleX = (canvas.width-paddleWidth)/2;
+            }
         }
     }
 
