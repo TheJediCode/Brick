@@ -6,8 +6,8 @@ let ctx = canvas.getContext("2d");
 let x = canvas.width/2;
 let y = canvas.height-30;
 
-let dx = 2;
-let dy = -2;
+let dx = 4;
+let dy = -4;
 
 let ballRadius = 10;
 
@@ -33,6 +33,8 @@ let lives = 3;
 
 sessionStorage.setItem("score", runningScore);
 sessionStorage.setItem("lives", lives);
+sessionStorage.getItem("score");
+sessionStorage.getItem("lives");
 
 for (let c=0; c<brickColumnCount; c++) {
     bricks[c] = [];
@@ -120,7 +122,8 @@ function collisionDetection() {
                         alert("VICTORY");
                         sessionStorage.getItem("score");
                         sessionStorage.getItem("lives");
-                        drawBricks();
+                        //document.getElementById("myJS").src += '';
+                        draw2();
                     }
                 }
             }
@@ -169,8 +172,8 @@ function draw() {
             else {
                 x = canvas.width/2;
                 y = canvas.height-30;
-                dx = 3;
-                dy = -3;
+                dx = 4;
+                dy = -4;
                 paddleX = (canvas.width-paddleWidth)/2;
             }
         }
@@ -203,5 +206,69 @@ function draw() {
     
     requestAnimationFrame(draw);
 }
+
+function draw2() {
+    drawBall();
+    drawPaddle();
+    drawBricks();
+    drawScore();
+    drawLives();
+    collisionDetection();
+
+    if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+        dx = -dx;
+    }
+    if (y + dy < ballRadius ) {
+        dy = -dy;
+        //interval -= setInterval(draw, 10 - .5);
+    } 
+    else if (y + dy > canvas.height - ballRadius) {
+        if (x > paddleX && x < paddleX + paddleWidth) {
+            dy = -dy;
+        }
+        else {
+            lives--;
+            if (!lives) {
+                alert("GAME OVER");
+                document.location.reload();
+            }
+            else {
+                x = canvas.width/2;
+                y = canvas.height-30;
+                dx = 4;
+                dy = -4;
+                paddleX = (canvas.width-paddleWidth)/2;
+            }
+        }
+    }
+
+    if (rightPressed) {
+        paddleX += 4;
+        if (paddleX + paddleWidth > canvas.width) {
+            paddleX = canvas.width - paddleWidth;
+        }
+    } else if (leftPressed) {
+        paddleX -= 4;
+        if (paddleX < 0) {
+            paddleX = 0;
+        }
+    }
+
+/*   document.addEventListener("mousemove", e => {
+        paddleX = e.offsetX - canvas.width;
+        if (paddleX + paddleWidth > canvas.width) {
+            paddleX = canvas.width - paddleWidth;
+        }
+        if (paddleX < 0) {
+            paddleX = 0;
+        }
+    });
+*/   
+    x += dx;
+    y += dy;
+    
+    requestAnimationFrame(draw);
+}
+
 
 draw();
