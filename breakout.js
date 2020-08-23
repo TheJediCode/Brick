@@ -87,6 +87,19 @@ function drawPaddle() {
     ctx.closePath();
 }
 
+function randomHsl() {
+    let color = 'hsla(' + (Math.random() * 360) + ', 100%, 50%, 1)';
+    return color;
+}
+
+function brickColor() {
+    for (let c=0; c<brickColumnCount; c++) {
+        for (let r=0; r<brickRowCount; r++) {
+            ctx.fillStyle = randomHsl();
+        }
+    }
+}
+
 function drawBricks() {
     for (let c=0; c<brickColumnCount; c++) {
         for (let r=0; r<brickRowCount; r++) {
@@ -97,7 +110,7 @@ function drawBricks() {
                 bricks[c][r].y = brickY;
                 ctx.beginPath();
                 ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                ctx.fillStyle = "#0095DD";
+                ctx.fillStyle = brickColor();
                 ctx.fill();
                 ctx.closePath();
             }
@@ -120,10 +133,7 @@ function collisionDetection() {
                     }
                     if (score == brickRowCount*brickColumnCount) {
                         alert("VICTORY");
-                        sessionStorage.getItem("score");
-                        sessionStorage.getItem("lives");
-                        //document.getElementById("myJS").src += '';
-                        draw2();
+                        document.location.reload();
                     }
                 }
             }
@@ -206,69 +216,5 @@ function draw() {
     
     requestAnimationFrame(draw);
 }
-
-function draw2() {
-    drawBall();
-    drawPaddle();
-    drawBricks();
-    drawScore();
-    drawLives();
-    collisionDetection();
-
-    if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
-        dx = -dx;
-    }
-    if (y + dy < ballRadius ) {
-        dy = -dy;
-        //interval -= setInterval(draw, 10 - .5);
-    } 
-    else if (y + dy > canvas.height - ballRadius) {
-        if (x > paddleX && x < paddleX + paddleWidth) {
-            dy = -dy;
-        }
-        else {
-            lives--;
-            if (!lives) {
-                alert("GAME OVER");
-                document.location.reload();
-            }
-            else {
-                x = canvas.width/2;
-                y = canvas.height-30;
-                dx = 4;
-                dy = -4;
-                paddleX = (canvas.width-paddleWidth)/2;
-            }
-        }
-    }
-
-    if (rightPressed) {
-        paddleX += 4;
-        if (paddleX + paddleWidth > canvas.width) {
-            paddleX = canvas.width - paddleWidth;
-        }
-    } else if (leftPressed) {
-        paddleX -= 4;
-        if (paddleX < 0) {
-            paddleX = 0;
-        }
-    }
-
-/*   document.addEventListener("mousemove", e => {
-        paddleX = e.offsetX - canvas.width;
-        if (paddleX + paddleWidth > canvas.width) {
-            paddleX = canvas.width - paddleWidth;
-        }
-        if (paddleX < 0) {
-            paddleX = 0;
-        }
-    });
-*/   
-    x += dx;
-    y += dy;
-    
-    requestAnimationFrame(draw);
-}
-
 
 draw();
