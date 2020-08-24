@@ -1,8 +1,6 @@
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 
-//let interval = setInterval(draw, 10);
-
 let x = canvas.width/2;
 let y = canvas.height-30;
 
@@ -31,10 +29,6 @@ let score = 0;
 let runningScore = 0;
 let lives = 3;
 
-sessionStorage.setItem("score", runningScore);
-sessionStorage.setItem("lives", lives);
-sessionStorage.getItem("score");
-sessionStorage.getItem("lives");
 
 for (let c=0; c<brickColumnCount; c++) {
     bricks[c] = [];
@@ -74,7 +68,7 @@ function mouseMoveHandler(e) {
 function drawBall() {
     ctx.beginPath();
     ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#ff3105";
     ctx.fill();
     ctx.closePath();
 }
@@ -82,23 +76,11 @@ function drawBall() {
 function drawPaddle() {
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#14a90a";
     ctx.fill();
     ctx.closePath();
 }
 
-function randomHsl() {
-    let color = 'hsla(' + (Math.random() * 360) + ', 100%, 50%, 1)';
-    return color;
-}
-
-function brickColor() {
-    for (let c=0; c<brickColumnCount; c++) {
-        for (let r=0; r<brickRowCount; r++) {
-            ctx.fillStyle = randomHsl();
-        }
-    }
-}
 
 function drawBricks() {
     for (let c=0; c<brickColumnCount; c++) {
@@ -110,8 +92,22 @@ function drawBricks() {
                 bricks[c][r].y = brickY;
                 ctx.beginPath();
                 ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                ctx.fillStyle = brickColor();
-                ctx.fill();
+                if (r == 0) {
+                    ctx.fillStyle = "#05d620";
+                    ctx.fill();
+                }
+                if (r == 1) {
+                    ctx.fillStyle = "#950495";
+                    ctx.fill();
+                }
+                if (r == 2) {
+                    ctx.fillStyle = "#dbd900";
+                    ctx.fill();
+                }
+                if (r == 3) {
+                    ctx.fillStyle = "#0030e0";
+                    ctx.fill();
+                } 
                 ctx.closePath();
             }
         }
@@ -167,7 +163,6 @@ function draw() {
     }
     if (y + dy < ballRadius ) {
         dy = -dy;
-        //interval -= setInterval(draw, 10 - .5);
     } 
     else if (y + dy > canvas.height - ballRadius) {
         if (x > paddleX && x < paddleX + paddleWidth) {
@@ -200,17 +195,7 @@ function draw() {
             paddleX = 0;
         }
     }
-
-/*   document.addEventListener("mousemove", e => {
-        paddleX = e.offsetX - canvas.width;
-        if (paddleX + paddleWidth > canvas.width) {
-            paddleX = canvas.width - paddleWidth;
-        }
-        if (paddleX < 0) {
-            paddleX = 0;
-        }
-    });
-*/   
+  
     x += dx;
     y += dy;
     
