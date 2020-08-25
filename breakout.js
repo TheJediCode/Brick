@@ -17,12 +17,12 @@ let rightPressed = false;
 let leftPressed = false;
 
 let brickRowCount = 4;
-let brickColumnCount = 5;
+let brickColumnCount = 7;
 let brickWidth = 75;
 let brickHeight = 20;
-let brickPadding = 10;
+let brickPadding = 0;
 let brickOffsetTop = 30;
-let brickOffsetLeft = 30;
+let brickOffsetLeft = 0;
 let bricks = [];
 
 let score = 0;
