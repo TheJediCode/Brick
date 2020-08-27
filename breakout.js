@@ -7,7 +7,7 @@ let y = canvas.height-30;
 let dx = 4;
 let dy = -4;
 
-let ballRadius = 10;
+const ballRadius = 10;
 
 let paddleHeight = 10;
 let paddleWidth = 60;
@@ -17,8 +17,8 @@ let rightPressed = false;
 let leftPressed = false;
 
 let brickRowCount = 4;
-let brickColumnCount = 7;
-let brickWidth = 75;
+let brickColumnCount = 1;
+let brickWidth = 700;
 let brickHeight = 20;
 let brickPadding = 0;
 let brickOffsetTop = 30;
@@ -27,7 +27,7 @@ let bricks = [];
 
 let score = 0;
 let runningScore = 0;
-let lives = 3;
+let lives = 300;
 
 
 for (let c=0; c<brickColumnCount; c++) {
@@ -129,12 +129,40 @@ function collisionDetection() {
                     }
                     if (score == brickRowCount*brickColumnCount) {
                         alert("VICTORY");
-                        document.location.reload();
+                        //document.location.reload();
+                        reload();
                     }
                 }
             }
         }
     }
+}
+
+function reload() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let c=0; c<brickColumnCount; c++) {
+        for (let r=0; r<brickRowCount; r++) {
+            let b = bricks[c][r];
+            b.status = 1;
+            if (b.status == 1) {
+                if (x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
+                    dy = -dy;
+                    b.status = 0;
+                    score++;
+                    runningScore++;
+                    if (runningScore % 10 == 0) {
+                        lives++;
+                    }
+                    if (score == brickRowCount*brickColumnCount) {
+                        alert("VICTORY");
+                        //document.location.reload();
+                        reload();
+                    }
+                }
+            }
+        }
+    }
+    //ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 function drawScore() {
@@ -200,6 +228,15 @@ function draw() {
     y += dy;
     
     requestAnimationFrame(draw);
+}
+
+function draw2() {
+    drawBall();
+    drawPaddle();
+    drawBricks();
+    drawScore();
+    drawLives();
+    collisionDetection();
 }
 
 draw();
