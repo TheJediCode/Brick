@@ -174,7 +174,11 @@ function reload() {
     for (let c=0; c<brickColumnCount; c++) {
         for (let r=0; r<brickRowCount; r++) {
             let b = bricks[c][r];
-            b.status = 1; 
+            b.status = 1;
+            x = canvas.width/2;
+            y = canvas.height-30;
+            dx = 4;
+            dy = -4;
         }
     }
 }
