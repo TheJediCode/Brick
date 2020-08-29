@@ -151,7 +151,7 @@ function collisionDetection() {
                     score++;
                     runningScore++;
                     hit.play();
-                    if (runningScore % 10 == 0) {
+                    if (runningScore % 15 == 0) {
                         lives++;
                     }
                     if (score == brickRowCount*brickColumnCount) {
